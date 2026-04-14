@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ASC — New Client</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="page-shell">
+
+  <header class="page-header"></header>
+
+  <div class="page-content">
+    <h1 class="page-heading">New Client Intake</h1>
+    <p class="page-sub">Fill in what you know. Paste the meeting transcript below and Claude will extract any missing fields automatically.</p>
+
+    <form class="form-card" id="intake-form" enctype="multipart/form-data">
+
+      <!-- Company Details -->
+      <p class="form-section-title">Company Details</p>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="companyName">Company name <span class="req">*</span></label>
+          <input class="form-input" type="text" id="companyName" name="companyName" placeholder="LoanFlow" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="founderName">Founder name</label>
+          <input class="form-input" type="text" id="founderName" name="founderName" placeholder="Jordan Chen" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="sector">Sector</label>
+          <select class="form-select" id="sector" name="sector">
+            <option value="">— select —</option>
+            <option>SaaS</option>
+            <option>FinTech</option>
+            <option>HealthTech</option>
+            <option>ConsumerTech</option>
+            <option>EdTech</option>
+            <option>PropTech</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="stage">Stage</label>
+          <select class="form-select" id="stage" name="stage">
+            <option value="">— select —</option>
+            <option>Pre-Seed</option>
+            <option>Seed</option>
+            <option>Series A</option>
+            <option>Series B</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="geography">Geography</label>
+        <input class="form-input" type="text" id="geography" name="geography" placeholder="New York" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="problemStatement">Problem statement</label>
+        <textarea class="form-textarea" id="problemStatement" name="problemStatement"
+          placeholder="One sentence describing the core problem the company solves."></textarea>
+      </div>
+
+      <!-- Financials -->
+      <p class="form-section-title">Financials (optional)</p>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="arr">ARR (USD)</label>
+          <input class="form-input" type="number" id="arr" name="arr" placeholder="180000" min="0" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="burnRate">Burn rate / month (USD)</label>
+          <input class="form-input" type="number" id="burnRate" name="burnRate" placeholder="45000" min="0" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="runway">Runway (months)</label>
+          <input class="form-input" type="number" id="runway" name="runway" placeholder="14" min="0" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="fundingAsk">Funding ask (USD)</label>
+          <input class="form-input" type="number" id="fundingAsk" name="fundingAsk" placeholder="2000000" min="0" />
+        </div>
+      </div>
+
+      <!-- Transcript & Documents -->
+      <p class="form-section-title">Meeting Transcript</p>
+
+      <div class="form-group">
+        <label class="form-label" for="transcript">Paste Fireflies transcript</label>
+        <textarea class="form-textarea form-textarea--lg" id="transcript" name="transcript"
+          placeholder="Paste the full meeting transcript here. Claude will extract any fields you left blank above."></textarea>
+        <span class="form-hint">If you've already filled all fields above, you can leave this blank.</span>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="documents">Upload financial documents (optional)</label>
+        <input class="form-file-input" type="file" id="documents" name="documents"
+          accept=".txt,.pdf" multiple />
+        <span class="form-hint">Accepts .txt and .pdf — plain text content will be passed to Claude for extraction.</span>
+      </div>
+
+      <button class="btn-submit" id="submit-btn" type="submit">Generate Deck, Model &amp; VC Shortlist</button>
+
+      <div class="form-loading" id="loading" hidden>
+        <div class="spinner"></div>
+        <span id="loading-text">Extracting context from transcript…</span>
+      </div>
+
+      <div class="form-error" id="form-error" hidden></div>
+
+    </form>
+  </div>
+
+  <script src="nav.js"></script>
+  <script>
+    const form = document.getElementById('intake-form');
+    const submitBtn = document.getElementById('submit-btn');
+    const loading = document.getElementById('loading');
+    const loadingText = document.getElementById('loading-text');
+    const errorEl = document.getElementById('form-error');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorEl.hidden = true;
+
+      const hasTranscript = document.getElementById('transcript').value.trim().length > 0;
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Working…';
+      loading.hidden = false;
+      loadingText.textContent = hasTranscript
+        ? 'Extracting context from transcript…'
+        : 'Building context from form fields…';
+
+      // Brief pause so the loading message renders before the long fetch
+      await new Promise(r => setTimeout(r, 50));
+      loadingText.textContent = 'Generating pitch deck, financial model and VC shortlist… (this takes ~30s)';
+
+      try {
+        const data = new FormData(form);
+        const res = await fetch('/intake', { method: 'POST', body: data });
+        const json = await res.json().catch(() => ({}));
+
+        if (!res.ok) {
+          throw new Error(json.error || `Server error ${res.status}`);
+        }
+
+        loadingText.textContent = 'Done! Redirecting to review board…';
+        window.location.href = json.redirectUrl;
+
+      } catch (err) {
+        loading.hidden = true;
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Generate Deck, Model & VC Shortlist';
+        errorEl.textContent = err.message;
+        errorEl.hidden = false;
+      }
+    });
+  </script>
+</body>
+</html>

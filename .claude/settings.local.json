@@ -1,0 +1,40 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//usr/local/bin/**)",
+      "Bash(export PATH=\"/opt/homebrew/bin:$PATH\")",
+      "Bash(/usr/local/bin/node --version)",
+      "Read(//usr/local/lib/node_modules/npm/bin/**)",
+      "Read(//usr/local/lib/node_modules/.bin/**)",
+      "Bash(/usr/local/bin/npm init:*)",
+      "Bash(export PATH=\"/usr/local/bin:$PATH\")",
+      "Bash(npm --version)",
+      "Bash(npm init:*)",
+      "Bash(npm install:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(node -e \":*)",
+      "Bash(npm run:*)",
+      "Bash(node scripts/test-pipeline.js)",
+      "Bash(node -e \"console.log\\(''ANTHROPIC_API_KEY already in env:'', ''ANTHROPIC_API_KEY'' in process.env\\); console.log\\(''Value starts with:'', \\(process.env.ANTHROPIC_API_KEY || ''''\\).slice\\(0,20\\)\\)\")",
+      "Bash(open -a TextEdit \"/Users/shehryar/Desktop/ASC - Workflow/.env\")",
+      "Bash(command -v node)",
+      "Read(//opt/homebrew/bin/**)",
+      "Bash(export PATH=\"/opt/homebrew/bin:/usr/local/bin:$PATH\")",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(''''model keys:'''', list\\(d[''''model''''].keys\\(\\)\\)\\); print\\(''''base row 0:'''', d[''''model''''][''''base''''][0]\\); print\\(''''deck slide 1:'''', {k:d[''''deck''''][0][k] for k in [''''slideNumber'''',''''title'''']}\\); print\\(''''vc 0:'''', {k:d[''''vcShortlist''''][0][k] for k in [''''rank'''',''''name'''',''''firm'''',''''score'''']}\\)\")",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(pkill -f \"node server.js\")",
+      "Bash(python3 -c \":*)",
+      "Bash(curl -s -X POST http://localhost:3000/outputs/LoanFlow/approve -H 'Content-Type: application/json' -d '{\"\"section\"\":\"\"deck\"\"}')",
+      "Bash(curl -si http://localhost:3000/)",
+      "Bash(curl -s -X POST http://localhost:3000/outputs/LoanFlow/export -H 'Content-Type: application/json' -d '{}')",
+      "Bash(export PATH=\"/opt/homebrew/bin:/usr/local/bin:$PATH\" __NEW_LINE_a7eff5c27cbad879__ echo \"=== VC Shortlist export ===\" curl -s -X POST http://localhost:3000/outputs/LoanFlow/export -H 'Content-Type: application/json' -d '{\"\"\"\"section\"\"\"\":\"\"\"\"vcShortlist\"\"\"\"}')",
+      "Bash(python3 -m json.tool __NEW_LINE_a7eff5c27cbad879__ echo \"\" echo \"=== Export All ===\" curl -s -X POST http://localhost:3000/outputs/LoanFlow/export -H 'Content-Type: application/json' -d '{}')",
+      "Bash(python3 -m json.tool)",
+      "Bash(/opt/homebrew/bin/npm install:*)",
+      "Bash(ls /opt/homebrew/bin/node*)",
+      "Bash(ls /usr/local/bin/node*)",
+      "Read(//opt/**)",
+      "Bash(xargs kill:*)"
+    ]
+  }
+}

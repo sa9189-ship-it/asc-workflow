@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ASC — Review</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="page-shell">
+
+  <header class="page-header"></header>
+
+  <div id="error-banner" class="error-banner" hidden>
+    <span id="error-text"></span>
+  </div>
+
+  <!-- Case header with tabs -->
+  <div class="case-header" id="case-header" hidden>
+    <div class="case-header-inner">
+      <div class="case-header-top">
+        <div>
+          <h1 class="case-title" id="case-title"></h1>
+          <div class="case-subtitle" id="case-subtitle"></div>
+        </div>
+        <button class="btn-export-all" id="btn-export-all" disabled
+          title="All outputs must be approved before exporting">Export All</button>
+      </div>
+      <div class="tab-bar" id="tab-bar"></div>
+    </div>
+  </div>
+
+  <!-- Main content + sidebar -->
+  <div class="review-layout" id="review-layout" hidden>
+    <div class="review-main" id="review-main"></div>
+    <aside class="review-sidebar" id="review-sidebar"></aside>
+  </div>
+
+  <!-- Export result bar -->
+  <div class="export-result-bar" id="export-result-bar" hidden>
+    <div class="export-result-msg" id="export-result-msg"></div>
+  </div>
+
+  <script src="nav.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

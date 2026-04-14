@@ -1,0 +1,9 @@
+node_modules/
+.env
+uploads/transcripts/*.json
+uploads/financials/
+outputs/
+data/outputs/
+*.log
+*.zip
+.DS_Store

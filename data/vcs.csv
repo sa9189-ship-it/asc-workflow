@@ -1,0 +1,31 @@
+name,firm,geography,stages,sectors,minCheck,maxCheck,website,notes
+Sarah Chen,Meridian Ventures,SF,Pre-Seed; Seed,SaaS; FinTech; DevTools,250000,1500000,meridianvc.com,Former Stripe PM; strong operator network in payments
+James Holloway,Holloway Capital,SF,Seed; Series A,SaaS; Enterprise; Security,500000,3000000,hollowaycap.com,Leads rounds; requires board seat at Series A
+Priya Nair,Blueshift Partners,SF,Pre-Seed; Seed,HealthTech; BioTech; MedDevice,250000,2000000,blueshiftpartners.com,Clinical background; warm intros strongly preferred
+Marcus Webb,Coastline Ventures,SF,Seed; Series A,ConsumerTech; Marketplace; D2C,500000,4000000,coastlinevc.com,Operator-first fund; ex-Airbnb and Lyft founders
+Dana Forsythe,Redwood Growth,SF,Series A; Series B,SaaS; Data Infrastructure; AI,3000000,12000000,redwoodgrowth.com,Focuses on developer-led growth companies
+Kevin Park,Sequoia Flats Fund,SF,Pre-Seed; Seed,FinTech; Crypto; WealthTech,250000,1000000,sequoiaflats.com,Solo GP; writes fast; no lead requirement
+Amara Osei,Sundial Ventures,SF,Seed; Series A,ConsumerTech; EdTech; HealthTech,750000,5000000,sundialvc.com,Impact-aligned; B-corp friendly
+Tom Gallagher,Pacific Crest Seed,SF,Pre-Seed; Seed,SaaS; MarTech; Analytics,250000,2000000,pacificcrestseed.com,Former Salesforce exec; enterprise SaaS specialist
+Rachel Kim,Firebreak Capital,SF,Series A; Series B,FinTech; InsurTech; RegTech,2000000,10000000,firebreakcap.com,Deep FS relationships; ex-Goldman, ex-Visa
+Lena Hartmann,Alto Ventures,SF,Seed; Series A,AI; ML Infrastructure; SaaS,500000,4000000,altoventures.co,Technical partners; MIT and Stanford network
+David Okonkwo,Thornwood Fund,SF,Series A; Series B,HealthTech; DigitalHealth; SaaS,3000000,15000000,thornwoodfund.com,Clinical + tech operator; portfolio includes 3 unicorns
+Sofia Reyes,Mission Bay Capital,SF,Pre-Seed; Seed,BioTech; HealthTech; MedDevice,250000,1500000,missionbaycap.com,UCSF and Stanford Med affiliate; science-heavy deals
+Raj Pillai,Sutter Hill Seed,SF,Seed,DevTools; SaaS; Infrastructure,500000,2000000,sutterhillseed.com,Writes solo; prefers technical co-founders
+Isabel Fong,Tandem Partners,SF,Series A,ConsumerTech; Marketplace; FinTech,2000000,8000000,tandempartners.vc,Pair invests with operating partner model
+Chris Navarro,Bayview Growth Equity,SF,Series B,SaaS; Enterprise; Security,5000000,15000000,bayviewgrowth.com,Growth-stage only; needs $3M+ ARR
+Nina Patel,Manhattan Seed Collective,NY,Pre-Seed; Seed,FinTech; WealthTech; Crypto,250000,1500000,manhattanseedco.com,NYC-first mandate; strong Wall Street LP base
+Eric Sundstrom,Gramercy Ventures,NY,Seed; Series A,SaaS; AdTech; MarTech,500000,5000000,gramercyvc.com,Media and advertising network; ex-WPP and Google
+Claudia Torres,Hudson Capital Partners,NY,Series A; Series B,FinTech; InsurTech; LegalTech,2000000,12000000,hudsoncap.vc,Regulatory expertise; strong DC policy network
+Ben Ashworth,Flatiron Fund,NY,Pre-Seed; Seed,HealthTech; DigitalHealth; WellnessTech,250000,2000000,flatironfund.co,Clinical trial experience; hospital system intros
+Monica St. Claire,Tribeca Ventures,NY,Seed; Series A,ConsumerTech; D2C; Marketplace,500000,4000000,tribecaventures.com,Strong media and retail LP relationships
+Daniel Cho,Park Avenue Growth,NY,Series A; Series B,SaaS; Enterprise; Data,3000000,15000000,parkavenuevc.com,Enterprise sales network; ex-Oracle and SAP
+Yasmin Al-Rashid,Nomad Capital,NY,Pre-Seed; Seed,EdTech; FutureOfWork; SaaS,250000,1000000,nomadcap.co,Remote-first focus; global founder friendly
+Peter Novak,Lenox Hill Fund,NY,Seed; Series A,FinTech; PropTech; InsurTech,750000,5000000,lenoxhillfund.com,Real estate and insurance operator network
+Alicia Brand,East River Partners,NY,Series A,HealthTech; BioTech; DigitalHealth,2000000,10000000,eastriverpartners.vc,MD/MBA partner; NYU Langone and Mt. Sinai network
+Kwame Mensah,Harlem Capital Seed,NY,Pre-Seed; Seed,ConsumerTech; FinTech; EdTech,250000,2000000,harlemcapitalseed.com,Diversity-focused; strong HBCU and community network
+Julia Bernstein,Murray Hill Ventures,NY,Seed; Series A,SaaS; LegalTech; HRTech,500000,4000000,murrayhillvc.com,Employment law background; strong professional services LPs
+Theo Wainwright,Brooklyn Bridge Fund,NY,Pre-Seed; Seed,Hardware; CleanTech; DeepTech,250000,1500000,brooklynbridgefund.com,Engineering-heavy; Cornell Tech affiliate
+Samira Hassan,Fifth Avenue Equity,NY,Series B,SaaS; FinTech; Enterprise,5000000,15000000,fifthaveequity.com,Late Series B specialist; strong IPO prep experience
+Oliver Drummond,Chelsea Capital,NY,Seed; Series A,AI; SaaS; MarTech; Analytics,750000,6000000,chelseacap.vc,Data science background; ex-Bloomberg and Two Sigma
+Mei Lin,Canal Street Ventures,NY,Pre-Seed; Seed,FinTech; ConsumerTech; Marketplace,250000,1500000,canalstreetvc.com,First-generation founder focus; bilingual (Mandarin) network

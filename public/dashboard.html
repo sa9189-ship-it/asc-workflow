@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ASC — Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="page-shell">
+
+  <header class="page-header"></header>
+
+  <div class="page-content page-content--wide">
+    <h1 class="page-heading">Active Cases</h1>
+    <p class="page-sub" id="case-count">Loading…</p>
+    <div id="dashboard" class="dashboard-grid"></div>
+  </div>
+
+  <script src="nav.js"></script>
+  <script>
+    const SECTIONS = ['deck', 'model', 'vcShortlist'];
+    const SECTION_LABELS = { deck: 'Deck', model: 'Model', vcShortlist: 'VCs' };
+
+    function fmtDate(iso) {
+      if (!iso) return '—';
+      try {
+        return new Date(iso).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' });
+      } catch { return iso; }
+    }
+
+    function esc(str) {
+      return String(str ?? '')
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function allApproved(approvals) {
+      return SECTIONS.every(s => approvals?.[s]);
+    }
+
+    function renderCard(c) {
+      const approved = allApproved(c.approvals);
+      const hasExport = c.exportedFiles?.length > 0;
+
+      const tags = [c.sector, c.stage, c.founderName].filter(Boolean)
+        .map(t => `<span class="case-tag">${esc(t)}</span>`).join('');
+
+      const indicators = SECTIONS.map(s => {
+        const ok = c.approvals?.[s];
+        return `<span class="approval-indicator ${ok ? 'approved' : 'pending'}">
+          <span class="dot"></span>${SECTION_LABELS[s]}
+        </span>`;
+      }).join('');
+
+      const exportNote = hasExport
+        ? `<div class="export-status has-export">✓ Exported (${c.exportedFiles.length} files)</div>`
+        : `<div class="export-status">Not yet exported</div>`;
+
+      return `
+        <div class="case-card" id="card-${esc(c.slug)}">
+          <div class="case-card-header">
+            <h2 class="case-name">${esc(c.companyName)}</h2>
+            <span class="case-version-badge">${esc(c.version)}</span>
+          </div>
+          <div class="case-body">
+            <div class="case-meta">Generated ${fmtDate(c.generatedAt)}</div>
+            ${tags ? `<div class="case-tags">${tags}</div>` : ''}
+            <div class="approvals-row">${indicators}</div>
+            ${exportNote}
+          </div>
+          <div class="case-footer">
+            <a class="btn-open-review" href="/?slug=${encodeURIComponent(c.slug)}">Open Review</a>
+            <button class="btn-export-case"
+              data-slug="${esc(c.slug)}"
+              ${approved ? '' : 'disabled title="All three outputs must be approved before exporting"'}>
+              Export All
+            </button>
+          </div>
+        </div>`;
+    }
+
+    async function exportCase(slug, btn) {
+      btn.disabled = true;
+      btn.textContent = 'Exporting…';
+      try {
+        const res = await fetch(`/outputs/${encodeURIComponent(slug)}/export`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({}),
+        });
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(json.error || `HTTP ${res.status}`);
+        btn.textContent = `✓ Exported`;
+        btn.disabled = true;
+        // Update export status text in the card
+        const card = document.getElementById(`card-${slug}`);
+        const statusEl = card?.querySelector('.export-status');
+        if (statusEl) {
+          statusEl.className = 'export-status has-export';
+          statusEl.textContent = `✓ Exported (${json.files?.length ?? 4} files)`;
+        }
+      } catch (err) {
+        btn.textContent = 'Export All';
+        btn.disabled = false;
+        alert(`Export failed: ${err.message}`);
+      }
+    }
+
+    async function loadDashboard() {
+      const container = document.getElementById('dashboard');
+      const countEl = document.getElementById('case-count');
+
+      try {
+        const res = await fetch('/cases');
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const cases = await res.json();
+
+        if (!cases.length) {
+          countEl.textContent = 'No cases yet.';
+          container.innerHTML = `
+            <div class="dashboard-empty">
+              <p>No client cases found.</p>
+              <a href="/new.html" class="btn-open-review" style="display:inline-block;width:auto;padding:10px 24px">
+                Start your first intake →
+              </a>
+            </div>`;
+          return;
+        }
+
+        const approvedCount = cases.filter(c => allApproved(c.approvals)).length;
+        countEl.textContent = `${cases.length} case${cases.length !== 1 ? 's' : ''} · ${approvedCount} fully approved`;
+
+        container.innerHTML = cases.map(renderCard).join('');
+
+        // Wire Export All buttons
+        container.querySelectorAll('.btn-export-case:not([disabled])').forEach(btn => {
+          btn.addEventListener('click', () => exportCase(btn.dataset.slug, btn));
+        });
+
+      } catch (err) {
+        countEl.textContent = 'Failed to load cases.';
+        container.innerHTML = `<p style="color:var(--red);padding:16px">${err.message}</p>`;
+      }
+    }
+
+    loadDashboard();
+  </script>
+</body>
+</html>
