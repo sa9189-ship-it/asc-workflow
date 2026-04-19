@@ -70,11 +70,12 @@ app.get('/auth/logout', (req, res) => {
 });
 
 // ── Auth middleware ────────────────────────────────────────────────────────
-// Protects all routes except /website/*, /pitch-deck/*, /login, and /auth/*
+// Protects all routes except /, /website/*, /pitch-deck/*, /login, and /auth/*
 function requireAuth(req, res, next) {
   const publicPaths = ['/login', '/login.html', '/auth/login', '/auth/logout'];
   if (
     publicPaths.includes(req.path) ||
+    req.path === '/' ||
     req.path.startsWith('/website/') ||
     req.path.startsWith('/pitch-deck/')
   ) {
@@ -98,10 +99,14 @@ function requireAuth(req, res, next) {
 
 app.use(requireAuth);
 
-// Bare / redirects to dashboard
-app.get('/', (req, res, next) => {
-  if (!req.query.slug) return res.redirect('/dashboard.html');
-  next();
+// Root: marketing website for public visitors, dashboard for authenticated users
+app.get('/', (req, res) => {
+  const signedCookie = req.signedCookies && req.signedCookies.asc_auth;
+  const authHeader = req.headers.authorization;
+  if (signedCookie === 'consultant' || authHeader === `Bearer ${process.env.PORTAL_PASSWORD}`) {
+    return res.redirect('/dashboard.html');
+  }
+  res.sendFile(path.join(__dirname, 'public', 'website', 'index.html'));
 });
 
 app.use(express.static(path.join(__dirname, 'public')));
