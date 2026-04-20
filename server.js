@@ -106,7 +106,9 @@ app.get('/', (req, res) => {
   if (signedCookie === 'consultant' || authHeader === `Bearer ${process.env.PORTAL_PASSWORD}`) {
     return res.redirect('/dashboard.html');
   }
-  res.sendFile(path.join(__dirname, 'public', 'website', 'index.html'));
+  // Redirect to /website/ so express.static serves the file directly —
+  // avoids any __dirname path resolution issues on Railway.
+  res.redirect(301, '/website/');
 });
 
 app.use(express.static(path.join(__dirname, 'public')));
