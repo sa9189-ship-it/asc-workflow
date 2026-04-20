@@ -108,7 +108,7 @@ app.get('/', (req, res) => {
   }
   // Redirect to /website/ so express.static serves the file directly —
   // avoids any __dirname path resolution issues on Railway.
-  res.redirect(301, '/website/');
+  res.sendFile(path.join(__dirname, 'public', 'website', 'index.html'));
 });
 
 app.use(express.static(path.join(__dirname, 'public')));
