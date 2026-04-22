@@ -70,17 +70,12 @@ app.get('/auth/logout', (req, res) => {
 });
 
 // ── Auth middleware ────────────────────────────────────────────────────────
-// Protects all routes except /website/*, /pitch-deck/*, /login, and /auth/*
-// On the public domain (asquareconsultancy.us), / is also public.
-function isPublicDomain(req) {
-  return req.hostname === 'asquareconsultancy.us' || req.hostname === 'www.asquareconsultancy.us';
-}
-
+// Protects all routes except /, /website/*, /pitch-deck/*, /login, and /auth/*
 function requireAuth(req, res, next) {
   const publicPaths = ['/login', '/login.html', '/auth/login', '/auth/logout'];
   if (
     publicPaths.includes(req.path) ||
-    (req.path === '/' && isPublicDomain(req)) ||
+    req.path === '/' ||
     req.path.startsWith('/website/') ||
     req.path.startsWith('/pitch-deck/')
   ) {
@@ -104,16 +99,9 @@ function requireAuth(req, res, next) {
 
 app.use(requireAuth);
 
-// Root: hostname-based routing
-// - asquareconsultancy.us → public marketing website
-// - app.asquareconsultancy.us (and any other host) → internal app
+// Root: always serve the public marketing website
 app.get('/', (req, res) => {
-  if (isPublicDomain(req)) {
-    return res.sendFile(path.join(__dirname, 'public', 'website', 'index.html'));
-  }
-  // Internal app: requireAuth already redirected unauthenticated users to /login.
-  // If we reach here the user is authenticated.
-  res.redirect('/dashboard.html');
+  res.sendFile(path.join(__dirname, 'public', 'website', 'index.html'));
 });
 
 app.use(express.static(path.join(__dirname, 'public')));
