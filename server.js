@@ -70,12 +70,17 @@ app.get('/auth/logout', (req, res) => {
 });
 
 // ── Auth middleware ────────────────────────────────────────────────────────
-// Protects all routes except /, /website/*, /pitch-deck/*, /login, and /auth/*
+// Protects all routes except /website/*, /pitch-deck/*, /login, and /auth/*
+// On the public domain (asquareconsultancy.us), / is also public.
+function isPublicDomain(req) {
+  return req.hostname === 'asquareconsultancy.us' || req.hostname === 'www.asquareconsultancy.us';
+}
+
 function requireAuth(req, res, next) {
   const publicPaths = ['/login', '/login.html', '/auth/login', '/auth/logout'];
   if (
     publicPaths.includes(req.path) ||
-    req.path === '/' ||
+    (req.path === '/' && isPublicDomain(req)) ||
     req.path.startsWith('/website/') ||
     req.path.startsWith('/pitch-deck/')
   ) {
@@ -99,16 +104,16 @@ function requireAuth(req, res, next) {
 
 app.use(requireAuth);
 
-// Root: marketing website for public visitors, dashboard for authenticated users
+// Root: hostname-based routing
+// - asquareconsultancy.us → public marketing website
+// - app.asquareconsultancy.us (and any other host) → internal app
 app.get('/', (req, res) => {
-  const signedCookie = req.signedCookies && req.signedCookies.asc_auth;
-  const authHeader = req.headers.authorization;
-  if (signedCookie === 'consultant' || authHeader === `Bearer ${process.env.PORTAL_PASSWORD}`) {
-    return res.redirect('/dashboard.html');
+  if (isPublicDomain(req)) {
+    return res.sendFile(path.join(__dirname, 'public', 'website', 'index.html'));
   }
-  // Redirect to /website/ so express.static serves the file directly —
-  // avoids any __dirname path resolution issues on Railway.
-  res.sendFile(path.join(__dirname, 'public', 'website', 'index.html'));
+  // Internal app: requireAuth already redirected unauthenticated users to /login.
+  // If we reach here the user is authenticated.
+  res.redirect('/dashboard.html');
 });
 
 app.use(express.static(path.join(__dirname, 'public')));
