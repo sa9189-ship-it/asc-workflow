@@ -146,7 +146,7 @@
         });
         const data = await res.json();
         if (data.success) {
-          window.location.href = '/';
+          window.location.href = '/app';
         } else {
           errorMsg.classList.add('visible');
           btn.disabled = false;
