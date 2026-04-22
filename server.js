@@ -70,12 +70,17 @@ app.get('/auth/logout', (req, res) => {
 });
 
 // ── Auth middleware ────────────────────────────────────────────────────────
-// Protects all routes except /, /website/*, /pitch-deck/*, /login, and /auth/*
+// On the public domain (asquareconsultancy.us), "/" is public.
+// On the app subdomain (app.asquareconsultancy.us), "/" requires auth.
+function isPublicDomain(req) {
+  return req.hostname === 'asquareconsultancy.us' || req.hostname === 'www.asquareconsultancy.us';
+}
+
 function requireAuth(req, res, next) {
   const publicPaths = ['/login', '/login.html', '/auth/login', '/auth/logout'];
   if (
     publicPaths.includes(req.path) ||
-    req.path === '/' ||
+    (req.path === '/' && isPublicDomain(req)) ||
     req.path.startsWith('/website/') ||
     req.path.startsWith('/pitch-deck/')
   ) {
@@ -99,9 +104,14 @@ function requireAuth(req, res, next) {
 
 app.use(requireAuth);
 
-// Root: always serve the public marketing website
+// Root: hostname-based routing
+// - asquareconsultancy.us → public marketing website
+// - app.asquareconsultancy.us → internal app (requireAuth already enforces login)
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'website', 'index.html'));
+  if (isPublicDomain(req)) {
+    return res.sendFile(path.join(__dirname, 'public', 'website', 'index.html'));
+  }
+  res.redirect('/dashboard.html');
 });
 
 app.use(express.static(path.join(__dirname, 'public')));
